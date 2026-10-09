@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Campanha interna de conscientização em segurança da informação da TRENA.">
+  <title>Simulação de Phishing | TRENA</title>
+
+  <style>
+    :root {
+      --black: #0b0b0b;
+      --black-light: #181818;
+      --red: #c62828;
+      --red-dark: #8e0000;
+      --red-soft: #fff2f2;
+      --green: #1b7f3a;
+      --green-soft: #eef9f1;
+      --blue: #0067b8;
+      --blue-dark: #005a9e;
+      --text: #242424;
+      --muted: #666666;
+      --border: #e2e2e2;
+      --surface: #ffffff;
+      --background: #f2f4f7;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    .topbar {
+      width: 100%;
+      background: linear-gradient(90deg, var(--black), var(--black-light));
+      color: #ffffff;
+      border-bottom: 3px solid var(--red);
+    }
+
+    .topbar-content {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 84px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-box {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255,255,255,.88);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    .company-name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .program-name {
+      color: #cfcfcf;
+      font-size: 13px;
+    }
+
+    .topbar-tag {
+      color: #dddddd;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .hero {
+      padding: 64px 20px 94px;
+      color: #ffffff;
+      text-align: center;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.11), transparent 30%),
+        linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+    }
+
+    .hero-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255,255,255,.75);
+      border-radius: 50%;
+      font-size: 34px;
+      background: rgba(255,255,255,.1);
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #ffecec;
+      font-size: clamp(16px, 2.5vw, 20px);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 32px));
+      margin: -58px auto 48px;
+      position: relative;
+    }
+
+    .card {
+      padding: clamp(24px, 5vw, 46px);
+      border: 1px solid rgba(0,0,0,.05);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .6px;
+    }
+
+    .alert {
+      padding: 25px;
+      border: 1px solid #f1c7c7;
+      border-left: 6px solid var(--red);
+      border-radius: 10px;
+      background: var(--red-soft);
+    }
+
+    .alert h2 {
+      margin-bottom: 10px;
+      color: #9f1d1d;
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.25;
+    }
+
+    .alert p + p {
+      margin-top: 10px;
+    }
+
+    .section-title {
+      margin: 38px 0 18px;
+      font-size: clamp(23px, 3vw, 30px);
+      line-height: 1.25;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-box {
+      height: 100%;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fafafa;
+    }
+
+    .info-icon {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .info-box h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 28px;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      padding: 13px 14px 13px 45px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #ffffff;
+    }
+
+    .checklist li::before {
+      content: "!";
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .learning {
+      margin-top: 34px;
+      padding: 24px;
+      border: 1px solid #bfe1c8;
+      border-left: 6px solid var(--green);
+      border-radius: 10px;
+      background: var(--green-soft);
+    }
+
+    .learning h3 {
+      margin-bottom: 8px;
+      color: #145f2c;
+      font-size: 21px;
+    }
+
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 22px;
+      border-radius: 7px;
+      color: #ffffff;
+      background: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid rgba(0,103,184,.3);
+      outline-offset: 3px;
+    }
+
+    .contact-note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .details {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .details h3 {
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-item {
+      padding: 14px;
+      border-radius: 9px;
+      background: #f6f7f8;
+    }
+
+    .detail-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .45px;
+    }
+
+    .privacy-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      padding: 22px 20px 34px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 820px) {
+      .topbar-content {
+        padding: 16px 0;
+      }
+
+      .topbar-tag {
+        display: none;
+      }
+
+      .info-grid,
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .checklist {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar-content {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .logo-box {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+      }
+
+      .company-name {
+        font-size: 14px;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+      main {
+        width: min(100% - 20px, 1040px);
+      }
+
+      .card {
+        border-radius: 13px;
+      }
+
+      .actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="brand">
+        <div class="logo-box" aria-hidden="true">T</div>
+        <div>
+          <div class="company-name">TRENA - Terraplenagem e Construções S.A.</div>
+          <div class="program-name">Programa de Segurança da Informação</div>
+        </div>
+      </div>
+      <div class="topbar-tag">Tecnologia da Informação</div>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-icon" aria-hidden="true">🎣</div>
+    <h1 id="page-title">Simulação de Phishing</h1>
+    <p>Campanha interna de conscientização em segurança digital</p>
+  </section>
+
+  <main>
+    <article class="card">
+      <div class="badge">● SIMULAÇÃO CONTROLADA</div>
+
+      <section class="alert" aria-labelledby="alert-title">
+        <h2 id="alert-title">Você clicou em um e-mail que simulava uma tentativa de phishing.</h2>
+        <p>Não se preocupe. Esta página faz parte de uma campanha interna de conscientização.</p>
+        <p>Nenhuma senha, dado pessoal ou informação corporativa foi solicitada por esta página. O objetivo é reforçar boas práticas e ajudar os colaboradores a identificar ameaças reais.</p>
+      </section>
+
+      <h2 class="section-title">Entenda o que aconteceu</h2>
+
+      <section class="info-grid" aria-label="Informações sobre phishing">
+        <div class="info-box">
+          <div class="info-icon" aria-hidden="true">🎣</div>
+          <h3>O que é phishing?</h3>
+          <p>É uma tentativa de enganar o usuário para que ele clique em links, forneça credenciais ou execute uma ação indevida.</p>
+        </div>
+
+        <div class="info-box">
+          <div class="info-icon" aria-hidden="true">⚠️</div>
+          <h3>Qual era o alerta?</h3>
+          <p>A mensagem utilizava elementos comuns em golpes, como urgência, solicitação de validação e incentivo ao clique.</p>
+        </div>
+
+        <div class="info-box">
+          <div class="info-icon" aria-hidden="true">🛡️</div>
+          <h3>Como se proteger?</h3>
+          <p>Confira o remetente, valide o endereço dos links e procure a equipe de TI sempre que houver dúvida.</p>
+        </div>
+      </section>
+
+      <h2 class="section-title">Sinais que indicam uma possível fraude</h2>
+
+      <ul class="checklist">
+        <li>Pedidos urgentes para atualizar senhas ou cadastros.</li>
+        <li>Ameaças de bloqueio ou suspensão da conta.</li>
+        <li>Links encurtados, alterados ou desconhecidos.</li>
+        <li>Solicitação de senhas, códigos ou dados confidenciais.</li>
+        <li>Mensagens inesperadas sobre benefícios ou premiações.</li>
+        <li>Erros de escrita, identidade visual incomum ou remetente suspeito.</li>
+      </ul>
+
+      <section class="learning" aria-labelledby="learning-title">
+        <h3 id="learning-title">✓ Aprendizado importante</h3>
+        <p>Em uma situação real, o clique poderia direcionar para uma página falsa de autenticação ou iniciar o download de conteúdo malicioso. Antes de clicar, pare, confira e valide.</p>
+      </section>
+
+      <div class="actions">
+        <a class="button" href="mailto:ti@empresa.com.br?subject=D%C3%BAvida%20sobre%20a%20simula%C3%A7%C3%A3o%20de%20phishing">
+          Entrar em contato com a Equipe de TI
+        </a>
+        <span class="contact-note">Altere “ti@empresa.com.br” para o endereço oficial da sua equipe de TI.</span>
+      </div>
+
+      <section class="details" aria-labelledby="details-title">
+        <h3 id="details-title">Detalhes da simulação</h3>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Data e hora do acesso</span>
+            <span id="datetime">Carregando...</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Campanha</span>
+            <span>Conscientização em Segurança da Informação</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Status</span>
+            <span>Página educativa exibida</span>
+          </div>
+        </div>
+        <p class="privacy-note">Esta versão é estática e não registra nome, e-mail, endereço IP ou outras informações do visitante.</p>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    TRENA • Tecnologia da Informação • Segurança da Informação<br>
+    Protegendo pessoas, dados e processos.
+  </footer>
+
+  <script>
+    (function () {
+      const dateElement = document.getElementById("datetime");
+      const now = new Date();
+
+      dateElement.textContent = new Intl.DateTimeFormat("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "medium"
+      }).format(now);
+    }());
+  </script>
+</body>
+</html>
